@@ -12,7 +12,8 @@ export default defineConfig({
     },
     include: ["**/tests/**/*.test.ts", "**/__tests__/**/*.test.ts"],
     exclude: ["**/dist/**", "**/build/**", "**/node_modules/**"],
-    setupFiles: [],
+    setupFiles: ["./tests/setupEnv.ts"],
+    testTimeout: 30000,
   },
   resolve: {
     alias: {
