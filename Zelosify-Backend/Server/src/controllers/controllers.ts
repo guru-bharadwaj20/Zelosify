@@ -29,3 +29,16 @@ export {
 
 // ===== HIRING MANAGEMENT =====
 export { fetchData } from "./hiring/hiringProfileController.js";
+
+export { getVendorOpenings } from "./vendor/openings/getVendorOpenings.js";
+export { getVendorOpeningDetails } from "./vendor/openings/getVendorOpeningDetails.js";
+export { presignProfileUploads } from "./vendor/profiles/presignProfileUploads.js";
+export { submitVendorProfiles } from "./vendor/profiles/submitVendorProfiles.js";
+export { deleteVendorProfile } from "./vendor/profiles/deleteVendorProfile.js";
+export { previewVendorProfile } from "./vendor/profiles/previewVendorProfile.js";
+
+export { getManagerOpenings } from "./hiring/openings/getManagerOpenings.js";
+export { getOpeningProfiles } from "./hiring/openings/getOpeningProfiles.js";
+export { shortlistHiringProfile } from "./hiring/profiles/shortlistHiringProfile.js";
+export { rejectHiringProfile } from "./hiring/profiles/rejectHiringProfile.js";
+export { previewHiringProfile } from "./hiring/profiles/previewHiringProfile.js";

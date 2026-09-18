@@ -2,6 +2,7 @@ import { Router, type RequestHandler } from "express";
 import { authenticateUser } from "../../middlewares/auth/authenticateMiddleware.js";
 import { authorizeRole } from "../../middlewares/auth/authorizeMiddleware.js";
 import { fetchData } from "../../controllers/controllers.js";
+import hiringOpeningRoutes from "./hiringOpeningRoutes.js";
 
 const router = Router();
 
@@ -27,5 +28,7 @@ router.get(
     }
   }) as RequestHandler
 );
+
+router.use("/", hiringOpeningRoutes);
 
 export default router;
