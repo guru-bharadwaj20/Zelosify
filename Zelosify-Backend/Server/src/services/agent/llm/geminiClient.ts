@@ -28,7 +28,7 @@ export interface LlmRequest {
 const BASE_URL = "https://generativelanguage.googleapis.com/v1beta/models";
 
 export const getModelName = (): string =>
-  process.env.GEMINI_MODEL || "gemini-3.6-flash";
+  process.env.GEMINI_MODEL || "gemini-3.5-flash-lite";
 
 export const isLlmConfigured = (): boolean =>
   Boolean(process.env.GEMINI_API_KEY);
@@ -45,25 +45,30 @@ export const callGemini = async ({
     throw new Error("GEMINI_API_KEY is not configured");
   }
 
-  const response = await axios.post(
-    `${BASE_URL}/${getModelName()}:generateContent`,
-    {
-      systemInstruction: { parts: [{ text: systemInstruction }] },
-      contents,
-      tools: [{ functionDeclarations: toolDeclarations }],
-      toolConfig: { functionCallingConfig: { mode: "AUTO" } },
-      generationConfig: {
-        temperature: 0,
-        maxOutputTokens: 512,
-        thinkingConfig: { thinkingBudget: 0 },
+  let response;
+
+  try {
+    response = await axios.post(
+      `${BASE_URL}/${getModelName()}:generateContent`,
+      {
+        systemInstruction: { parts: [{ text: systemInstruction }] },
+        contents,
+        tools: [{ functionDeclarations: toolDeclarations }],
+        toolConfig: { functionCallingConfig: { mode: "AUTO" } },
+        generationConfig: { temperature: 0, maxOutputTokens: 512 },
       },
-    },
-    {
-      params: { key: apiKey },
-      headers: { "Content-Type": "application/json" },
-      timeout: timeoutMs,
-    }
-  );
+      {
+        params: { key: apiKey },
+        headers: { "Content-Type": "application/json" },
+        timeout: timeoutMs,
+      }
+    );
+  } catch (error: any) {
+    const apiMessage = error.response?.data?.error?.message;
+    throw new Error(
+      apiMessage ? `${getModelName()}: ${apiMessage}` : error.message
+    );
+  }
 
   const candidate = response.data?.candidates?.[0];
   const usage = response.data?.usageMetadata || {};
