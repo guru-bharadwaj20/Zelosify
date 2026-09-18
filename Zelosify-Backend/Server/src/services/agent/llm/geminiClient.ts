@@ -8,6 +8,7 @@ export interface LlmFunctionCall {
 export interface LlmPart {
   text?: string;
   functionCall?: LlmFunctionCall;
+  thoughtSignature?: string;
 }
 
 export interface LlmResult {
@@ -27,7 +28,7 @@ export interface LlmRequest {
 const BASE_URL = "https://generativelanguage.googleapis.com/v1beta/models";
 
 export const getModelName = (): string =>
-  process.env.GEMINI_MODEL || "gemini-2.0-flash";
+  process.env.GEMINI_MODEL || "gemini-3.6-flash";
 
 export const isLlmConfigured = (): boolean =>
   Boolean(process.env.GEMINI_API_KEY);
@@ -51,7 +52,11 @@ export const callGemini = async ({
       contents,
       tools: [{ functionDeclarations: toolDeclarations }],
       toolConfig: { functionCallingConfig: { mode: "AUTO" } },
-      generationConfig: { temperature: 0, maxOutputTokens: 512 },
+      generationConfig: {
+        temperature: 0,
+        maxOutputTokens: 512,
+        thinkingConfig: { thinkingBudget: 0 },
+      },
     },
     {
       params: { key: apiKey },
