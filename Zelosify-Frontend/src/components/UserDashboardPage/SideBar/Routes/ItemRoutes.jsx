@@ -48,7 +48,6 @@ const getOverviewItemsByRole = (role) => {
         { title: "Payments", href: "/vendor/payments", icon: CreditCard },
       ];
 
-    // For HIRING_MANAGER
     case "HIRING_MANAGER":
       return [
         {

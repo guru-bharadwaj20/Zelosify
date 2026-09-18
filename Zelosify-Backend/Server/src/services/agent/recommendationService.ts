@@ -98,19 +98,57 @@ export const generateRecommendation = async (
       openingId: profile.openingId,
       error: error.message,
     });
+
+    await prisma.$transaction(async (tx) => {
+      await tx.hiringProfile.update({
+        where: { id: profile.id },
+        data: {
+          recommendedAt: new Date(),
+          recommendationReason:
+            "This profile could not be scored automatically. Please open the file and review it manually.",
+          reasoningTrace: { error: error.message, model: getModelName() },
+        },
+      });
+    });
+
     return null;
   }
 };
 
-export const queueRecommendations = (profileIds: number[]): void => {
-  for (const profileId of profileIds) {
-    setImmediate(() => {
-      generateRecommendation(profileId).catch((error: any) => {
-        logError("recommendation.queue_failed", {
-          profileId,
-          error: error.message,
-        });
+const pendingProfileIds: number[] = [];
+let isDraining = false;
+
+const drainQueue = async () => {
+  if (isDraining) return;
+  isDraining = true;
+
+  while (pendingProfileIds.length > 0) {
+    const profileId = pendingProfileIds.shift() as number;
+
+    try {
+      await generateRecommendation(profileId);
+    } catch (error: any) {
+      logError("recommendation.queue_failed", {
+        profileId,
+        error: error.message,
       });
-    });
+    }
   }
+
+  isDraining = false;
+};
+
+export const queueRecommendations = (profileIds: number[]): void => {
+  pendingProfileIds.push(...profileIds);
+
+  logInfo("recommendation.queued", {
+    queued: profileIds.length,
+    pending: pendingProfileIds.length,
+  });
+
+  setImmediate(() => {
+    drainQueue().catch((error: any) => {
+      logError("recommendation.queue_failed", { error: error.message });
+    });
+  });
 };

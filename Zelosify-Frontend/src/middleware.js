@@ -95,7 +95,6 @@ export function middleware(request) {
     return NextResponse.redirect(new URL("/login", request.url));
   }
 
-  // Route guards: keep each role inside its own section
   if (path.startsWith("/vendor") && userRole !== "IT_VENDOR") {
     console.log(`Blocking ${userRole} from vendor route ${path}`);
     return NextResponse.redirect(new URL("/", request.url));

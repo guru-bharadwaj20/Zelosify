@@ -17,6 +17,12 @@ export const RECOMMENDATION_BADGES = {
     textClass: "text-red-700 dark:text-red-400",
     chipClass: "bg-red-50 dark:bg-red-900",
   },
+  NEEDS_REVIEW: {
+    label: "Needs manual review",
+    dotClass: "bg-orange-500",
+    textClass: "text-orange-700 dark:text-orange-400",
+    chipClass: "bg-orange-50 dark:bg-orange-900",
+  },
   PENDING: {
     label: "Scoring in progress",
     dotClass: "bg-gray-400",
@@ -46,5 +52,5 @@ export const countByLabel = (profiles) =>
       totals[key] = (totals[key] || 0) + 1;
       return totals;
     },
-    { RECOMMENDED: 0, BORDERLINE: 0, NOT_RECOMMENDED: 0, PENDING: 0 }
+    { RECOMMENDED: 0, BORDERLINE: 0, NOT_RECOMMENDED: 0, NEEDS_REVIEW: 0, PENDING: 0 }
   );

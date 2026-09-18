@@ -102,9 +102,11 @@ export const listOpeningProfiles = async (
       status: profile.status,
       recommended: profile.recommended,
       recommendationLabel:
-        profile.recommendationScore === null
-          ? "PENDING"
-          : classifyScore(profile.recommendationScore),
+        profile.recommendationScore !== null
+          ? classifyScore(profile.recommendationScore)
+          : profile.recommendedAt
+          ? "NEEDS_REVIEW"
+          : "PENDING",
       score: profile.recommendationScore,
       confidence: profile.recommendationConfidence,
       explanation: profile.recommendationReason,

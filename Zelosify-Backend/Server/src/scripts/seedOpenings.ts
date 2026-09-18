@@ -136,12 +136,19 @@ const getTenant = async () => {
 };
 
 const getHiringManager = async (tenantId: string) => {
-  const existing = await prisma.user.findFirst({
+  const registered = await prisma.user.findFirst({
+    where: { tenantId, role: "HIRING_MANAGER", externalId: { not: null } },
+    orderBy: { createdAt: "asc" },
+  });
+
+  if (registered) return { manager: registered, created: false };
+
+  const existingPlaceholder = await prisma.user.findFirst({
     where: { tenantId, role: "HIRING_MANAGER" },
     orderBy: { createdAt: "asc" },
   });
 
-  if (existing) return { manager: existing, created: false };
+  if (existingPlaceholder) return { manager: existingPlaceholder, created: true };
 
   const placeholder = await prisma.user.create({
     data: {
