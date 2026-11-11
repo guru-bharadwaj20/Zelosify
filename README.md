@@ -1,5 +1,13 @@
 # Zelosify — Contract Hiring Module
 
+<p align="center">
+  <a href="Zelosify%20Demo.mp4">
+    <img src="docs/Zelosify%20Demo%20thumbnail.png" alt="Watch the Zelosify demo video" width="720">
+  </a>
+  <br>
+  <sub>▶ <b><a href="Zelosify%20Demo.mp4">Watch the Zelosify demo</a></b> (90 s): the repo's compose stack and quick start on a fresh clone, the test suite run as a job, then a vendor's upload scored with no Gemini key, the hiring manager's shortlist and the role checks</sub>
+</p>
+
 **Vendors submit candidate profiles; a tool-calling agent scores them; hiring managers shortlist — and a resume that says "ignore all previous instructions" changes nothing.**
 
 [![Next.js](https://img.shields.io/badge/Next.js-15-000000?logo=nextdotjs&logoColor=white)](Zelosify-Frontend/package.json)
